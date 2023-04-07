@@ -1,0 +1,39 @@
+{
+  "name": "FrogFind",
+  "description": "Search window object for a specific value or property.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "action": {
+    "default_popup": "./popup/popup.html",
+    "default_icon": {
+      "16": "images/frog16.png",
+      "24": "images/frog24.png",
+      "32": "images/frog32.png",
+      "64": "images/frog64.png"
+    }
+  },
+  "icons": {
+    "16": "images/frog16.png",
+    "24": "images/frog24.png",
+    "32": "images/frog32.png",
+    "64": "images/frog64.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*"],
+      "js": ["content.js"],
+      "runAt": "document_start"
+    }
+  ],
+  "devtools_page": "devtools.html",
+  "web_accessible_resources": [
+    {
+      "resources": ["resources/inject.js"],
+      "matches": ["*://*/*"]
+    }
+  ]
+}

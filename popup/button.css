@@ -1,0 +1,41 @@
+button {
+  height: 30px;
+  background-color: #00a300;
+  color: white;
+}
+button:hover {
+  box-shadow: 0px 0px 1px 1px #014901;
+}
+#event-log {
+  width: 150px;
+  border-style: none;
+  border-radius: 5px;
+}
+
+#find {
+  height: 30px;
+  width: 30px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  border-style: none;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+button.current {
+  box-shadow: 0 0 0 2px white, 0 0 0 4px black;
+}
+
+.main {
+  min-height: 150px;
+}
+
+/* #event-log {
+  width: 150px;
+} */
+
+#log-btn-container {
+  display: flex;
+  justify-content: flex-end;
+}

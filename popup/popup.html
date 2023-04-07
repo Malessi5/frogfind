@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="button.css" />
+    <link rel="stylesheet" href="popup.css" />
+    <script src="popup.js" defer></script>
+  </head>
+  <body>
+    <div id="main">
+      <h2><img src="../images/frog24.png" /> FrogFind</h2>
+      <div class="separator"></div>
+      <section class="section">
+        <p>Search the window object for a specific property or value</p>
+        <form id="search-form">
+          <select id="search-type">
+            <option value="value">Value</option>
+            <option value="property">Property</option>
+          </select>
+          <select id="search-param">
+            <option value="is">is</option>
+            <option value="contains">contains</option>
+          </select>
+          <input id="search" autofocus placeholder="search" />
+          <button id="find" type="submit">
+            <img src="../images/search.svg" height="20" />
+          </button>
+        </form>
+      </section>
+      <div class="separator separatormargin"></div>
+    </div>
+  </body>
+</html>

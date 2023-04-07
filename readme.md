@@ -1,4 +1,4 @@
-##FrogFind
+## FrogFind
 
 #Google Chrome browser extension that searches the window objects for a specific value or property
 

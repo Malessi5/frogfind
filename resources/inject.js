@@ -29,7 +29,7 @@
             search_type,
             search_param,
           },
-          type: "search_results",
+          type: "display_search_results",
         },
       })
     );
@@ -274,7 +274,7 @@ const searchWindowObject = {
 
     const resultObject = findWindowObjWithPath(window, path);
     console.group(
-      `%c Search result ${idx} for "${result}"`,
+      `%c Search result #${idx} for "${result}"`,
       "font-weight:bold; background-color: #00a300; padding:5px"
     );
     console.log(`%c Path:`, "font-weight:bold;", path);

@@ -6,7 +6,7 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "permissions": ["storage", "activeTab", "scripting", "tabs", "sidePanel"],
   "action": {
     "default_popup": "./popup/popup.html",
     "default_icon": {
@@ -29,7 +29,9 @@
       "runAt": "document_start"
     }
   ],
-  "devtools_page": "devtools.html",
+  "side_panel": {
+    "default_path": "./popup/popup.html"
+  },
   "web_accessible_resources": [
     {
       "resources": ["resources/inject.js"],

@@ -1,4 +1,12 @@
 const frogFriendBackground = {
+  init: function () {
+    // Enable side panel and add listeners
+    chrome.sidePanel
+      .setPanelBehavior({ openPanelOnActionClick: true })
+      .catch((error) => console.error(error));
+
+    // this.addListeners();
+  },
   addListeners: async function () {
     const that = this;
     chrome.runtime.onMessage.addListener(function (message) {
@@ -6,7 +14,7 @@ const frogFriendBackground = {
         case "search_results":
           //sent from content script
           console.log("results received");
-          that.createResultsPopup(message);
+          // that.createResultsPopup(message);
           break;
       }
     });
@@ -41,4 +49,4 @@ const frogFriendBackground = {
   },
 };
 
-frogFriendBackground.addListeners();
+frogFriendBackground.init();

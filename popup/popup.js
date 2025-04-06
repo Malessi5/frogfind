@@ -11,6 +11,7 @@ const popup = {
           break;
         case "DOM_SEARCH_RESULTS":
           console.log("dom results", message);
+          dom_search.generateDomResults(message.data);
           break;
       }
     });
@@ -51,7 +52,9 @@ const popup = {
 search_result = {
   clearResults: function () {
     const resultDiv = document.querySelector("#result");
+    const domResultDiv = document.querySelector("#dom-result");
     resultDiv.innerHTML = "";
+    domResultDiv.innerHTML = "";
   },
   generateSearchResults: function (data) {
     // Clear previous results
@@ -63,7 +66,7 @@ search_result = {
     const resultsText = document.createElement("h3");
     const results = document.createElement("ol");
 
-    resultsText.innerHTML = `${paths.length} total results found for ${search_type} ${search_param} "${value}"`;
+    resultsText.innerHTML = `${paths.length} total window object results found for ${search_type} ${search_param} "${value}"`;
 
     resultDiv.appendChild(resultsText);
 
@@ -184,6 +187,68 @@ search_result = {
     });
 
     return { filteredOut, filteredPaths };
+  },
+};
+
+dom_search = {
+  generateDomResults: function (data) {
+    const { result, tabId } = data;
+
+    const domResultsDiv = document.querySelector("#dom-result");
+    const resultsText = document.createElement("h3");
+    const resultsList = document.createElement("ol");
+
+    resultsText.innerHTML = `${result.length} total DOM results found`;
+    domResultsDiv.appendChild(resultsText);
+
+    if (result.length) {
+      for (let i = 0; i < result.length; i++) {
+        let singleResult = dom_search.generateDOMResult(result[i], tabId);
+        resultsList.appendChild(singleResult);
+      }
+    } else {
+      let result = document.createElement("li");
+      result.textContent = "Not found";
+      results.appendChild(result);
+    }
+
+    domResultsDiv.appendChild(resultsList);
+  },
+  generateDOMResult: function (singleResult, tabId) {
+    const { index, location, selector, value } = singleResult;
+    let result = document.createElement("li");
+    let resultCtn = document.createElement("span");
+
+    resultCtn.classList.add("result-ctn");
+    result.classList.add("search-result");
+    result.title = value;
+    result.textContent = `${index + 1}. ${selector}`;
+
+    result.addEventListener("mouseover", function () {
+      dom_search.mouseOverHandler(index, tabId);
+    });
+
+    result.addEventListener("mouseout", function () {
+      dom_search.mouseOutHandler(index, tabId);
+    });
+
+    resultCtn.appendChild(result);
+    // this.addSendToConsoleBtn(resultCtn, path, value, tabId, idx);
+    // this.addCopyToClipboardBtn(resultCtn, path);
+
+    return resultCtn;
+  },
+  mouseOverHandler: async function (index, tabId) {
+    await chrome.tabs.sendMessage(tabId, {
+      type: "HIGHLIGHT_ELEMENT",
+      data: { index },
+    });
+  },
+  mouseOutHandler: async function (index, tabId) {
+    await chrome.tabs.sendMessage(tabId, {
+      type: "UNHIGHLIGHT_ELEMENT",
+      data: { index },
+    });
   },
 };
 popup.init();

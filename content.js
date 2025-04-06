@@ -1,6 +1,7 @@
 const contentScript = {
   DOMSearchResults: [],
   lastElementBackground: "",
+  lastElementBorder: "",
   init: async function () {
     chrome.runtime.onMessage.addListener((message) =>
       this.messageReceiver(message)
@@ -27,6 +28,12 @@ const contentScript = {
         break;
       case "console_log_results":
         this.dispatchEvent("consoleLogResults", message.data);
+        break;
+      case "HIGHLIGHT_ELEMENT":
+        this.highlightElement(message.data.index);
+        break;
+      case "UNHIGHLIGHT_ELEMENT":
+        this.unHighlightElement(message.data.index);
         break;
       default:
         break;
@@ -135,13 +142,51 @@ const contentScript = {
     }));
 
     chrome.runtime.sendMessage({
+      type: "DOM_SEARCH_RESULTS",
       data: {
-        type: "DOM_SEARCH_RESULTS",
         search_term: searchTerm,
         result: indexedResults,
         tabId,
       },
     });
+  },
+  highlightElement(index) {
+    console.log("highlight");
+    // Highlights and scrolls into view
+    if (contentScript.DOMSearchResults.length === 0) return;
+
+    const result = contentScript.DOMSearchResults[index];
+    let element = result.element;
+
+    while (!element.checkVisibility() && element !== document.body) {
+      element = element.parentElement;
+    }
+
+    result.highestVisibleElement = element;
+
+    contentScript.lastElementBackground = element.style.backgroundColor || "";
+    contentScript.lastElementBorder = element.style.borderColor || "";
+    element.scrollIntoView({ block: "center", behavior: "smooth" });
+    // need to keep track of last bg color before changing so we can change it back
+    element.style.backgroundColor = "#FDFF47";
+    element.style.border = "solid yellow 3px";
+  },
+  // unhighlights
+  unHighlightElement(index) {
+    const result = contentScript.DOMSearchResults[index];
+    let element = result.highestVisibleElement;
+
+    if (contentScript.lastElementBackground) {
+      // revert element's bg color
+      element.style.backgroundColor = contentScript.lastElementBackground;
+      contentScript.lastElementBackground = "";
+      // revert elements border
+      element.style.border = contentScript.lastElementBorder;
+      contentScript.lastElementBorder = "";
+    } else {
+      element.style.backgroundColor = "";
+      element.style.border = "";
+    }
   },
 };
 
